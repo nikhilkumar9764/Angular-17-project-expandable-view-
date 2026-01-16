@@ -14,7 +14,7 @@
     </button>
   </mat-toolbar>
 
-  <!-- CCY Summary -->
+  <!-- CCY Summary - Remains same -->
   <div class="ccy-summary-section">
     <div class="ccy-header">Ccy</div>
     <div class="ccy-items">
@@ -31,75 +31,164 @@
   <!-- Table -->
   <div class="table-container">
 
-    <mat-table [dataSource]="treeData" class="financial-table">
+    <mat-table [dataSource]="dataSource" class="financial-table">
 
-      <!-- Header -->
+      <!-- CCY / Name Column -->
       <ng-container matColumnDef="ccy">
         <mat-header-cell *matHeaderCellDef class="text-left">Ccy</mat-header-cell>
+        <mat-cell *matCellDef="let node" class="text-left expand-cell"
+          [style.padding-left.px]="node.isGroupHeader ? node.level * 20 : (node.level + 1) * 20 + 20">
+
+          <button mat-icon-button *ngIf="node.isGroupHeader" (click)="onToggleNode(node.id); $event.stopPropagation()">
+            <mat-icon>
+              {{ node.expanded ? 'expand_more' : 'chevron_right' }}
+            </mat-icon>
+          </button>
+
+          <strong *ngIf="node.isGroupHeader">{{ node.displayName }}</strong>
+          <span *ngIf="!node.isGroupHeader && node.rows?.[0] as row0">{{ row0.col1 }}</span>
+        </mat-cell>
       </ng-container>
 
+      <!-- Quantity -->
       <ng-container matColumnDef="quantity">
         <mat-header-cell *matHeaderCellDef class="text-right">Quantity</mat-header-cell>
+        <mat-cell *matCellDef="let node" class="text-right">
+          <span *ngIf="!node.isGroupHeader && node.rows?.[0] as row0">
+            {{ hasValue(row0.col2) ? formatNumber(row0.col2, 3) : '' }}
+          </span>
+        </mat-cell>
       </ng-container>
 
+      <!-- Description -->
       <ng-container matColumnDef="description">
         <mat-header-cell *matHeaderCellDef class="text-left">Description</mat-header-cell>
+        <mat-cell *matCellDef="let node" class="text-left">
+          <div *ngIf="!node.isGroupHeader" class="description-stack">
+            <!-- Row 0: Name -->
+            <div *ngIf="node.rows?.[0] as row0">{{ row0.col3 || '' }}</div>
+
+
+            <!-- Row 1: ISIN / Copy -->
+            <div *ngIf="node.rows?.[1] as row1" class="isin-row">
+              <span *ngIf="row1.col3">{{ row1.col3 }}</span>
+              <button mat-icon-button *ngIf="row1.col3?.includes('ISIN')" class="copy-btn"
+                (click)="copyToClipboard(row1.col3 || ''); $event.stopPropagation()">
+                <mat-icon>content_copy</mat-icon>
+              </button>
+            </div>
+
+
+            <!-- Row 2: Ratings/Extra -->
+            <div *ngIf="node.rows?.[2] as row2">{{ row2.col3 || '' }}</div>
+          </div>
+        </mat-cell>
       </ng-container>
 
+      <!-- ESG -->
       <ng-container matColumnDef="esg">
         <mat-header-cell *matHeaderCellDef class="text-center">ESG Rating</mat-header-cell>
+        <mat-cell *matCellDef="let node" class="text-center">
+          <span *ngIf="node.esgRating">{{ node.esgRating }}</span>
+        </mat-cell>
       </ng-container>
 
+      <!-- Cost Price -->
       <ng-container matColumnDef="cost">
         <mat-header-cell *matHeaderCellDef class="text-right">
           Cost Price<br><span class="sub-header">Cost FX</span>
         </mat-header-cell>
+        <mat-cell *matCellDef="let node" class="text-right">
+          <div *ngIf="!node.isGroupHeader">
+            <div *ngIf="node.rows?.[0] as row0">{{ hasValue(row0.col4) ? formatNumber(row0.col4, 2) : '' }}</div>
+            <div *ngIf="node.rows?.[1] as row1">{{ hasValue(row1.col4) ? formatNumber(row1.col4, 2) : '' }}</div>
+          </div>
+        </mat-cell>
       </ng-container>
 
+      <!-- Current Price -->
       <ng-container matColumnDef="current">
         <mat-header-cell *matHeaderCellDef class="text-right">
           Cur. Price<br>
           <span class="sub-header">Curr. FX<br>Price Date</span>
         </mat-header-cell>
+        <mat-cell *matCellDef="let node" class="text-right">
+          <div *ngIf="!node.isGroupHeader">
+            <div *ngIf="node.rows?.[0] as row0">{{ hasValue(row0.col5) ? formatNumber(row0.col5, 2) : '' }}</div>
+            <div *ngIf="node.rows?.[1] as row1">{{ hasValue(row1.col5) ? formatNumber(row1.col5, 2) : '' }}</div>
+            <div *ngIf="node.rows?.[2] as row2" class="sub-header">{{ row2.col5 || '' }}</div>
+          </div>
+        </mat-cell>
       </ng-container>
 
+      <!-- Valuation -->
       <ng-container matColumnDef="valuation">
         <mat-header-cell *matHeaderCellDef class="text-right">
           Valuation<br><span class="sub-header">Accrued Int</span>
         </mat-header-cell>
+        <mat-cell *matCellDef="let node" class="text-right">
+          <div *ngIf="!node.isGroupHeader">
+            <div *ngIf="node.rows?.[0] as row0">{{ hasValue(row0.col6) ? formatNumber(row0.col6, 0) : '' }}</div>
+            <div *ngIf="node.rows?.[1] as row1">{{ hasValue(row1.col6) ? formatNumber(row1.col6, 0) : '' }}</div>
+          </div>
+        </mat-cell>
       </ng-container>
 
+      <!-- Total CHF -->
       <ng-container matColumnDef="totalCHF">
         <mat-header-cell *matHeaderCellDef class="text-right">
           Total in CHF<br><span class="sub-header">Accrued Int</span>
         </mat-header-cell>
+        <mat-cell *matCellDef="let node" class="text-right">
+          <span *ngIf="node.isGroupHeader">
+            {{ formatNumber(node.totalInCHFAccruedInt, 0) }}
+          </span>
+          <div *ngIf="!node.isGroupHeader">
+            <div *ngIf="node.rows?.[0] as row0">{{ hasValue(row0.col7) ? formatNumber(row0.col7, 0) : '' }}</div>
+            <div *ngIf="node.rows?.[1] as row1">{{ hasValue(row1.col7) ? formatNumber(row1.col7, 0) : '' }}</div>
+          </div>
+        </mat-cell>
       </ng-container>
 
+      <!-- P/L Total -->
       <ng-container matColumnDef="plTotal">
         <mat-header-cell *matHeaderCellDef class="text-right">
           P/L Total<br><span class="sub-header">P/L Mkt<br>P/L Ccy</span>
         </mat-header-cell>
+        <mat-cell *matCellDef="let node" class="text-right">
+          <div *ngIf="!node.isGroupHeader">
+            <div *ngIf="node.rows?.[0] as row0">{{ hasValue(row0.col8) ? formatPercentage(row0.col8) : '' }}</div>
+            <div *ngIf="node.rows?.[1] as row1">{{ hasValue(row1.col8) ? formatNumber(row1.col8, 2) : '' }}</div>
+          </div>
+        </mat-cell>
       </ng-container>
 
+      <!-- P/L YTD -->
       <ng-container matColumnDef="plYtd">
         <mat-header-cell *matHeaderCellDef class="text-right">
           P/L YTD Total<br>
           <span class="sub-header">P/A YTD Mkt<br>P/A YTD Ccy</span>
         </mat-header-cell>
+        <mat-cell *matCellDef="let node" class="text-right">
+          <span *ngIf="!node.isGroupHeader && node.rows?.[1] as row1">
+            {{ hasValue(row1.col9) ? formatNumber(row1.col9, 2) : '' }}
+          </span>
+        </mat-cell>
       </ng-container>
 
+      <!-- Percentage -->
       <ng-container matColumnDef="perc">
         <mat-header-cell *matHeaderCellDef class="text-right">Perc.</mat-header-cell>
+        <mat-cell *matCellDef="let node" class="text-right">
+          {{ hasValue(node.percentage) ? formatPercentage(node.percentage) : '' }}
+        </mat-cell>
       </ng-container>
 
       <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
 
-      <!-- Row host -->
-      <mat-row *matRowDef="let node of treeData; columns: displayedColumns">
-        <mat-cell [attr.colspan]="displayedColumns.length">
-          {{node.description}}
-        </mat-cell>
-      </mat-row>
+      <!-- Single Row Definition for all nodes (Group and Detail represented structurally by same row, styled differently) -->
+      <mat-row *matRowDef="let node; columns: displayedColumns" [class.group-row]="node.isGroupHeader"
+        [class.detail-row]="!node.isGroupHeader" (click)="onToggleNode(node.id)"></mat-row>
 
     </mat-table>
 

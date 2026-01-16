@@ -1,23 +1,24 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Subject, takeUntil } from 'rxjs';
-import { FinancialRowComponent } from '../financial-row/financial-row.component';
 import { FinancialDataService } from '../../services/financial-data.service';
 import { FinancialNode, ApiResponse } from '../../models/financial-node.model';
-import { MatTableModule } from '@angular/material/table';
-import {MatToolbarModule} from '@angular/material/toolbar';
+import { MatTableModule, MatTableDataSource } from '@angular/material/table';
+import { MatToolbarModule } from '@angular/material/toolbar';
 import { CdkTableModule } from '@angular/cdk/table';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-financial-tree',
   standalone: true,
-  imports: [CommonModule, FinancialRowComponent , MatTableModule,MatToolbarModule,CdkTableModule],
+  imports: [CommonModule, MatTableModule, MatToolbarModule, CdkTableModule, MatButtonModule, MatIconModule],
   templateUrl: './financial-tree.component.html',
   styleUrls: ['./financial-tree.component.css']
 })
 export class FinancialTreeComponent implements OnInit, OnDestroy {
-  treeData: FinancialNode[] = [];
-  categorySummaries: Array<{name: string, total: number, percentage: number}> = [];
+  dataSource = new MatTableDataSource<FinancialNode>([]);
+  categorySummaries: Array<{ name: string, total: number, percentage: number }> = [];
   private destroy$ = new Subject<void>();
 
   displayedColumns: string[] = [
@@ -33,10 +34,10 @@ export class FinancialTreeComponent implements OnInit, OnDestroy {
     'plYtd',
     'perc'
   ];
-  
+
   private sampleData: ApiResponse = {
     "Data": {
-      "Table": [ {
+      "Table": [{
         "RecordId": 1,
         "TreeNodeId": 833,
         "TreeNodeSort": "00010-00010",
@@ -81,8 +82,8 @@ export class FinancialTreeComponent implements OnInit, OnDestroy {
         "Row3Col10": null,
         "EsgRatingGroupNr": -1,
         "ReportingTotalAsset": 58995.500000
-    },
-    {
+      },
+      {
         "RecordId": 2,
         "TreeNodeId": 833,
         "TreeNodeSort": "00010-00010",
@@ -127,8 +128,8 @@ export class FinancialTreeComponent implements OnInit, OnDestroy {
         "Row3Col10": null,
         "EsgRatingGroupNr": -1,
         "ReportingTotalAsset": 58995.500000
-    },
-    {
+      },
+      {
         "RecordId": 3,
         "TreeNodeId": 835,
         "TreeNodeSort": "00010-00030",
@@ -173,8 +174,8 @@ export class FinancialTreeComponent implements OnInit, OnDestroy {
         "Row3Col9": null,
         "Row3Col10": null,
         "EsgRatingGroupNr": -1
-    },
-    {
+      },
+      {
         "RecordId": 4,
         "TreeNodeId": 839,
         "TreeNodeSort": "00020-00010",
@@ -219,8 +220,8 @@ export class FinancialTreeComponent implements OnInit, OnDestroy {
         "Row3Col9": null,
         "Row3Col10": null,
         "EsgRatingGroupNr": -1
-    },
-    {
+      },
+      {
         "RecordId": 5,
         "TreeNodeId": 839,
         "TreeNodeSort": "00020-00010",
@@ -265,8 +266,8 @@ export class FinancialTreeComponent implements OnInit, OnDestroy {
         "Row3Col9": null,
         "Row3Col10": null,
         "EsgRatingGroupNr": -1
-    },
-    {
+      },
+      {
         "RecordId": 6,
         "TreeNodeId": 839,
         "TreeNodeSort": "00020-00010",
@@ -311,8 +312,8 @@ export class FinancialTreeComponent implements OnInit, OnDestroy {
         "Row3Col9": null,
         "Row3Col10": null,
         "EsgRatingGroupNr": -1
-    },
-    {
+      },
+      {
         "RecordId": 7,
         "TreeNodeId": null,
         "TreeNodeSort": null,
@@ -357,8 +358,8 @@ export class FinancialTreeComponent implements OnInit, OnDestroy {
         "Row3Col9": null,
         "Row3Col10": null,
         "EsgRatingGroupNr": -1
-    },
-    {
+      },
+      {
         "RecordId": 8,
         "TreeNodeId": 833,
         "TreeNodeSort": "00010-00010",
@@ -403,8 +404,8 @@ export class FinancialTreeComponent implements OnInit, OnDestroy {
         "Row3Col9": null,
         "Row3Col10": null,
         "EsgRatingGroupNr": -1
-    },
-    {
+      },
+      {
         "RecordId": 9,
         "TreeNodeId": 907,
         "TreeNodeSort": "00040-00040",
@@ -449,8 +450,8 @@ export class FinancialTreeComponent implements OnInit, OnDestroy {
         "Row3Col9": null,
         "Row3Col10": null,
         "EsgRatingGroupNr": 0
-    },
-    {
+      },
+      {
         "RecordId": 10,
         "TreeNodeId": 906,
         "TreeNodeSort": "00040-00030",
@@ -495,8 +496,8 @@ export class FinancialTreeComponent implements OnInit, OnDestroy {
         "Row3Col9": null,
         "Row3Col10": null,
         "EsgRatingGroupNr": 0
-    },
-    {
+      },
+      {
         "RecordId": 11,
         "TreeNodeId": 910,
         "TreeNodeSort": "00040-00070",
@@ -541,8 +542,8 @@ export class FinancialTreeComponent implements OnInit, OnDestroy {
         "Row3Col9": null,
         "Row3Col10": null,
         "EsgRatingGroupNr": 0
-    },
-    {
+      },
+      {
         "RecordId": 12,
         "TreeNodeId": 910,
         "TreeNodeSort": "00040-00070",
@@ -587,8 +588,8 @@ export class FinancialTreeComponent implements OnInit, OnDestroy {
         "Row3Col9": null,
         "Row3Col10": null,
         "EsgRatingGroupNr": 0,
-    },
-    {
+      },
+      {
         "RecordId": 13,
         "TreeNodeId": 898,
         "TreeNodeSort": "00030-00070",
@@ -633,26 +634,27 @@ export class FinancialTreeComponent implements OnInit, OnDestroy {
         "Row3Col9": null,
         "Row3Col10": null,
         "EsgRatingGroupNr": 0
-    }
-  ],
-},
-"Message": {
+      }
+      ],
+    },
+    "Message": {
       "MessageCode": 200,
       "Message": "Success",
     }
-  }
+  };
 
-  constructor(private financialDataService: FinancialDataService) {}
+  constructor(private financialDataService: FinancialDataService) { }
 
   ngOnInit(): void {
-    this.loadData();
-
     this.financialDataService.treeData$
       .pipe(takeUntil(this.destroy$))
       .subscribe(data => {
-        this.treeData = data;
+        const flatData = this.flattenTree(data);
+        this.dataSource.data = flatData;
         this.updateCategorySummaries();
       });
+
+    this.loadData();
   }
 
   ngOnDestroy(): void {
@@ -680,16 +682,47 @@ export class FinancialTreeComponent implements OnInit, OnDestroy {
     this.categorySummaries = this.financialDataService.getCategorySummaries();
   }
 
-  formatNumber(value: number | undefined, decimals: number = 0): string {
+  formatNumber(value: number | string | undefined | null, decimals: number = 0): string {
     if (value === undefined || value === null) return '';
-    return value.toLocaleString('en-US', {
+    const numValue = typeof value === 'string' ? parseFloat(value) : value;
+    if (isNaN(numValue)) return '';
+    return numValue.toLocaleString('en-US', {
       minimumFractionDigits: decimals,
       maximumFractionDigits: decimals
     });
   }
 
-  formatPercentage(value: number | undefined): string {
+  formatPercentage(value: number | undefined | null): string {
     if (value === undefined || value === null) return '';
     return value.toFixed(2) + '%';
+  }
+
+  private flattenTree(nodes: FinancialNode[]): FinancialNode[] {
+    const result: FinancialNode[] = [];
+    for (const node of nodes) {
+      result.push(node);
+      if (node.expanded && node.children) {
+        result.push(...this.flattenTree(node.children));
+      }
+    }
+    return result;
+  }
+
+  isNumber(value: any): boolean {
+    return typeof value === 'number';
+  }
+
+  hasValue(value: any): boolean {
+    return value !== null && value !== undefined;
+  }
+
+  copyToClipboard(text: string): void {
+    if (!text) return;
+    navigator.clipboard.writeText(text).then(() => {
+      // Optional: Add notification here if needed
+      console.log('Copied to clipboard:', text);
+    }).catch(err => {
+      console.error('Failed to copy: ', err);
+    });
   }
 }
