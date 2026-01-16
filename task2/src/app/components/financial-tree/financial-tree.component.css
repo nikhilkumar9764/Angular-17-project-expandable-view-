@@ -1,0 +1,152 @@
+.financial-tree-container {
+    padding: 20px;
+    background-color: #f5f5f5;
+    min-height: 100vh;
+  }
+  
+  .toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 15px 20px;
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  
+  .toolbar h2 {
+    margin: 0;
+    color: #333;
+    font-size: 24px;
+  }
+  
+  .toolbar-actions {
+    display: flex;
+    gap: 10px;
+  }
+  
+  .btn {
+    padding: 8px 16px;
+    background-color: #5b7db1;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: background-color 0.2s;
+  }
+  
+  .btn:hover {
+    background-color: #4a6a98;
+  }
+  
+  .ccy-summary-section {
+    background-color: #e8eef5;
+    padding: 15px 20px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+
+  .ccy-header {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 10px;
+    font-size: 14px;
+  }
+
+  .ccy-items {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  .ccy-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+  }
+
+  .ccy-name {
+    font-weight: 500;
+    color: #333;
+  }
+
+  .ccy-value {
+    color: #333;
+    font-weight: 500;
+  }
+
+  .ccy-percentage {
+    color: #666;
+  }
+
+  .table-container {
+    background-color: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    overflow-x: auto;
+  }
+  
+  .financial-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+  }
+  
+  .financial-table thead {
+    background-color: #e8eef5;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+  
+  .financial-table th {
+    padding: 12px 8px;
+    font-weight: 600;
+    color: #333;
+    border-bottom: 2px solid #5b7db1;
+    white-space: nowrap;
+  }
+  
+  .financial-table th .sub-header {
+    font-size: 11px;
+    font-weight: 400;
+    color: #666;
+  }
+  
+  .financial-table td {
+    padding: 8px;
+    border-bottom: 1px solid #e0e0e0;
+  }
+  
+  .text-left {
+    text-align: left;
+  }
+  
+  .text-right {
+    text-align: right;
+  }
+  
+  .text-center {
+    text-align: center;
+  }
+  
+  @media (max-width: 1200px) {
+    .financial-tree-container {
+      padding: 10px;
+    }
+  
+    .financial-table {
+      font-size: 12px;
+    }
+  
+    .financial-table th,
+    .financial-table td {
+      padding: 6px 4px;
+    }
+  }
+  

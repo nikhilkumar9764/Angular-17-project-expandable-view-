@@ -1,0 +1,107 @@
+<div class="financial-tree-container">
+
+  <!-- Toolbar -->
+  <mat-toolbar class="toolbar" color="primary">
+    <span>Portfolio Holdings</span>
+    <span class="spacer"></span>
+
+    <button mat-raised-button color="accent" (click)="expandAll()">
+      Expand All
+    </button>
+
+    <button mat-raised-button color="accent" (click)="collapseAll()">
+      Collapse All
+    </button>
+  </mat-toolbar>
+
+  <!-- CCY Summary -->
+  <div class="ccy-summary-section">
+    <div class="ccy-header">Ccy</div>
+    <div class="ccy-items">
+      <div *ngFor="let summary of categorySummaries" class="ccy-item">
+        <span class="ccy-name">{{ summary.name }}:</span>
+        <span class="ccy-value">{{ formatNumber(summary.total, 0) }}</span>
+        <span class="ccy-percentage">
+          ({{ formatPercentage(summary.percentage) }})
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div class="table-container">
+
+    <mat-table [dataSource]="treeData" class="financial-table">
+
+      <!-- Header -->
+      <ng-container matColumnDef="ccy">
+        <mat-header-cell *matHeaderCellDef class="text-left">Ccy</mat-header-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="quantity">
+        <mat-header-cell *matHeaderCellDef class="text-right">Quantity</mat-header-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="description">
+        <mat-header-cell *matHeaderCellDef class="text-left">Description</mat-header-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="esg">
+        <mat-header-cell *matHeaderCellDef class="text-center">ESG Rating</mat-header-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="cost">
+        <mat-header-cell *matHeaderCellDef class="text-right">
+          Cost Price<br><span class="sub-header">Cost FX</span>
+        </mat-header-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="current">
+        <mat-header-cell *matHeaderCellDef class="text-right">
+          Cur. Price<br>
+          <span class="sub-header">Curr. FX<br>Price Date</span>
+        </mat-header-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="valuation">
+        <mat-header-cell *matHeaderCellDef class="text-right">
+          Valuation<br><span class="sub-header">Accrued Int</span>
+        </mat-header-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="totalCHF">
+        <mat-header-cell *matHeaderCellDef class="text-right">
+          Total in CHF<br><span class="sub-header">Accrued Int</span>
+        </mat-header-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="plTotal">
+        <mat-header-cell *matHeaderCellDef class="text-right">
+          P/L Total<br><span class="sub-header">P/L Mkt<br>P/L Ccy</span>
+        </mat-header-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="plYtd">
+        <mat-header-cell *matHeaderCellDef class="text-right">
+          P/L YTD Total<br>
+          <span class="sub-header">P/A YTD Mkt<br>P/A YTD Ccy</span>
+        </mat-header-cell>
+      </ng-container>
+
+      <ng-container matColumnDef="perc">
+        <mat-header-cell *matHeaderCellDef class="text-right">Perc.</mat-header-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+
+      <!-- Row host -->
+      <mat-row *matRowDef="let node of treeData; columns: displayedColumns">
+        <mat-cell [attr.colspan]="displayedColumns.length">
+          {{node.description}}
+        </mat-cell>
+      </mat-row>
+
+    </mat-table>
+
+  </div>
+</div>
