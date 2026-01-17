@@ -137,7 +137,6 @@ export class FinancialDataService {
   private createDetailNode(record: ApiRecord): FinancialNode {
     const rows: RowData[] = [];
     
-    if (record.Row1Col3) {
       rows.push({
         col1: record.Row1Col1,
         col2: record.Row1Col2,
@@ -151,9 +150,7 @@ export class FinancialDataService {
         col10: record.Row1Col10,
         col11: record.Row1Col11
       });
-    }
-
-    if (record.Row2Col3) {
+  
       rows.push({
         col1: record.Row2Col1,
         col2: record.Row2Col2,
@@ -166,9 +163,8 @@ export class FinancialDataService {
         col9: record.Row2Col9,
         col10: record.Row2Col10
       });
-    }
 
-    if (record.Row3Col3 || record.Row3Col5) {
+    
       rows.push({
         col1: record.Row3Col1,
         col2: record.Row3Col2,
@@ -181,7 +177,6 @@ export class FinancialDataService {
         col9: record.Row3Col9,
         col10: record.Row3Col10
       });
-    }
 
     const esgRating = this.getEsgRating(record.EsgRatingGroupNr);
 

@@ -1,0 +1,52 @@
+<div class="org-node-container">
+  <!-- Node Card -->
+  <div class="org-node-card" 
+       [class.has-children]="node.children && node.children.length > 0"
+       (click)="onNodeClick()">
+    
+    <!-- Avatar -->
+    <div class="avatar">
+      <div class="avatar-circle" [style.background]="getAvatarColor()">
+        {{ getInitials() }}
+      </div>
+    </div>
+    
+    <!-- Info -->
+    <div class="node-info">
+      <div class="node-name">{{ node.name }}</div>
+      <div class="node-position">{{ node.position }}</div>
+      <div class="node-department">{{ node.department }}</div>
+    </div>
+    
+    <!-- Expand/Collapse Button -->
+    <button 
+      *ngIf="node.children && node.children.length > 0"
+      class="expand-btn"
+      (click)="onToggleExpand($event)">
+      <span class="expand-icon" [class.expanded]="node.expanded">
+        {{ node.expanded ? '-' : '+' }}
+      </span>
+      <span class="child-count">{{ node.children.length }}</span>
+    </button>
+  </div>
+  
+  <!-- Connector Line -->
+  <div *ngIf="node.children && node.children.length > 0 && node.expanded" 
+       class="vertical-line"></div>
+  
+  <!-- Children Container -->
+  <div *ngIf="node.children && node.children.length > 0 && node.expanded" 
+       class="children-container">
+    <div class="horizontal-line"></div>
+    <div class="children-wrapper">
+      <div *ngFor="let child of node.children" class="child-node">
+        <div class="child-connector"></div>
+        <app-org-node 
+          [node]="child"
+          (nodeClick)="nodeClick.emit($event)"
+          (toggleExpand)="toggleExpand.emit($event)">
+        </app-org-node>
+      </div>
+    </div>
+  </div>
+</div>

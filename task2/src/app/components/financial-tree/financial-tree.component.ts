@@ -649,8 +649,8 @@ export class FinancialTreeComponent implements OnInit, OnDestroy {
     this.financialDataService.treeData$
       .pipe(takeUntil(this.destroy$))
       .subscribe(data => {
-        const flatData = this.flattenTree(data);
-        this.dataSource.data = flatData;
+        this.dataSource.data = this.flattenTree(data);
+        console.log(this.dataSource.data);
         this.updateCategorySummaries();
       });
 

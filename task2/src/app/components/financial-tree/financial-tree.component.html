@@ -46,7 +46,8 @@
           </button>
 
           <strong *ngIf="node.isGroupHeader">{{ node.displayName }}</strong>
-          <span *ngIf="!node.isGroupHeader && node.rows?.[0] as row0">{{ row0.col1 }}</span>
+          <span *ngIf="!node.isGroupHeader && node.rows?.[0] as row0">{{ row0.col1 }}</span> <br/>
+          <span *ngIf="!node.isGroupHeader && node.rows?.[1] as row1">{{ row1.col1 }}</span>
         </mat-cell>
       </ng-container>
 
@@ -54,9 +55,12 @@
       <ng-container matColumnDef="quantity">
         <mat-header-cell *matHeaderCellDef class="text-right">Quantity</mat-header-cell>
         <mat-cell *matCellDef="let node" class="text-right">
-          <span *ngIf="!node.isGroupHeader && node.rows?.[0] as row0">
+          <div *ngIf="!node.isGroupHeader && node.rows?.[0] as row0">
             {{ hasValue(row0.col2) ? formatNumber(row0.col2, 3) : '' }}
-          </span>
+          </div> <br>
+          <div *ngIf="!node.isGroupHeader && node.rows?.[1] as row1">
+            {{ hasValue(row1.col2) ? formatNumber(row1.col2, 3) : '' }}
+          </div>
         </mat-cell>
       </ng-container>
 
@@ -159,6 +163,7 @@
           <div *ngIf="!node.isGroupHeader">
             <div *ngIf="node.rows?.[0] as row0">{{ hasValue(row0.col8) ? formatPercentage(row0.col8) : '' }}</div>
             <div *ngIf="node.rows?.[1] as row1">{{ hasValue(row1.col8) ? formatNumber(row1.col8, 2) : '' }}</div>
+            <div *ngIf="node.rows?.[2] as row2">{{ hasValue(row2.col8) ? formatNumber(row2.col8, 0) : '' }}</div>
           </div>
         </mat-cell>
       </ng-container>
